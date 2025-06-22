@@ -16,11 +16,15 @@ const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleQuickAction = (action: string) => {
-    toast({
-      title: "Feature activated",
-      description: `${action} feature is ready to use!`,
-    });
+  const handleQuickAction = (action: string, targetTab: string) => {
+    setActiveTab(targetTab);
+    // Trigger the add dialog for the specific component
+    setTimeout(() => {
+      const addButton = document.querySelector(`[data-action="${action}"]`) as HTMLButtonElement;
+      if (addButton) {
+        addButton.click();
+      }
+    }, 100);
   };
 
   const handleBackToLanding = () => {
@@ -74,7 +78,7 @@ const Index = () => {
             <Button 
               variant="outline" 
               className="h-20 flex flex-col space-y-2 hover:bg-emerald-50 border-emerald-200 text-emerald-700 transform hover:scale-105 transition-all shadow-md"
-              onClick={() => handleQuickAction("Add Medication")}
+              onClick={() => handleQuickAction("add-medication", "medications")}
             >
               <Plus className="w-6 h-6" />
               <span>Add Medication</span>
@@ -82,7 +86,7 @@ const Index = () => {
             <Button 
               variant="outline" 
               className="h-20 flex flex-col space-y-2 hover:bg-teal-50 border-teal-200 text-teal-700 transform hover:scale-105 transition-all shadow-md"
-              onClick={() => handleQuickAction("Schedule Appointment")}
+              onClick={() => handleQuickAction("add-appointment", "appointments")}
             >
               <Calendar className="w-6 h-6" />
               <span>Schedule Appointment</span>
@@ -90,7 +94,7 @@ const Index = () => {
             <Button 
               variant="outline" 
               className="h-20 flex flex-col space-y-2 hover:bg-cyan-50 border-cyan-200 text-cyan-700 transform hover:scale-105 transition-all shadow-md"
-              onClick={() => handleQuickAction("Add Family Member")}
+              onClick={() => handleQuickAction("add-family", "family")}
             >
               <Users className="w-6 h-6" />
               <span>Add Family Member</span>
@@ -98,10 +102,10 @@ const Index = () => {
             <Button 
               variant="outline" 
               className="h-20 flex flex-col space-y-2 hover:bg-green-50 border-green-200 text-green-700 transform hover:scale-105 transition-all shadow-md"
-              onClick={() => handleQuickAction("Log Health Data")}
+              onClick={() => setActiveTab("dashboard")}
             >
               <Activity className="w-6 h-6" />
-              <span>Log Health Data</span>
+              <span>View Health Data</span>
             </Button>
           </div>
         </div>
