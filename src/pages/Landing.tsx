@@ -6,14 +6,20 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Heart, Shield, Calendar, Users, Activity, Star, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import SignInModal from "@/components/SignInModal";
 
 const Landing = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [showSignIn, setShowSignIn] = useState(false);
 
   const handleGetStarted = () => {
     navigate("/app");
+  };
+
+  const handleSignIn = () => {
+    setShowSignIn(true);
   };
 
   const handleSelectPlan = (planType: string) => {
@@ -115,20 +121,20 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-emerald-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center shadow-lg">
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">CareSync</h1>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">CareSync</h1>
               </div>
             </div>
-            <Button onClick={handleGetStarted} variant="outline">
+            <Button onClick={handleSignIn} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-50">
               Sign In
             </Button>
           </div>
@@ -140,18 +146,18 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             Smart Family Health
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600"> Scheduling</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500"> Scheduling</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Keep your family healthy and organized with AI-powered scheduling, medication tracking, and health insights. 
             All in one beautiful, easy-to-use platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={handleGetStarted} className="text-lg px-8 py-3">
+            <Button size="lg" onClick={handleGetStarted} className="text-lg px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-lg transform hover:scale-105 transition-all">
               Get Started Free
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-3">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-3 border-emerald-300 text-emerald-700 hover:bg-emerald-50">
               Watch Demo
             </Button>
           </div>
@@ -159,7 +165,7 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/50">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/70">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -171,12 +177,12 @@ const Landing = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all transform hover:scale-105 bg-gradient-to-br from-white to-emerald-50">
                 <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-100 to-green-100 rounded-lg flex items-center justify-center mx-auto mb-4 text-blue-600">
+                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-lg flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
                     {feature.icon}
                   </div>
-                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                  <CardTitle className="text-xl text-emerald-700">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-center text-gray-600">
@@ -204,21 +210,21 @@ const Landing = () => {
             {plans.map((plan, index) => (
               <Card 
                 key={index} 
-                className={`relative overflow-hidden transition-all hover:shadow-xl ${
-                  plan.popular ? 'border-2 border-blue-500 scale-105' : 'border border-gray-200'
+                className={`relative overflow-hidden transition-all hover:shadow-xl transform hover:scale-105 ${
+                  plan.popular ? 'border-2 border-emerald-400 bg-gradient-to-br from-emerald-50 to-teal-50' : 'border border-gray-200 bg-white'
                 }`}
               >
                 {plan.badge && (
                   <div className="absolute top-0 right-0">
-                    <Badge className="rounded-l-none rounded-br-none bg-gradient-to-r from-blue-600 to-green-600">
+                    <Badge className="rounded-l-none rounded-br-none bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
                       {plan.badge}
                     </Badge>
                   </div>
                 )}
                 <CardHeader className="text-center pb-8">
-                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+                  <CardTitle className="text-2xl font-bold text-emerald-700">{plan.name}</CardTitle>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                    <span className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">{plan.price}</span>
                     <span className="text-gray-600 ml-2">/{plan.period}</span>
                   </div>
                   <CardDescription className="mt-4 text-lg">
@@ -227,7 +233,11 @@ const Landing = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Button 
-                    className="w-full" 
+                    className={`w-full transition-all transform hover:scale-105 ${
+                      plan.popular 
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg' 
+                        : 'border-emerald-300 text-emerald-700 hover:bg-emerald-50'
+                    }`}
                     variant={plan.buttonVariant}
                     onClick={() => handleSelectPlan(plan.name.toLowerCase())}
                     disabled={selectedPlan === plan.name.toLowerCase()}
@@ -237,7 +247,7 @@ const Landing = () => {
                   <ul className="space-y-3">
                     {plan.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-center">
-                        <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                        <Check className="w-5 h-5 text-emerald-500 mr-3 flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </li>
                     ))}
@@ -250,15 +260,15 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-green-600">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-emerald-500 to-teal-500">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to transform your family's health?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-xl text-emerald-100 mb-8">
             Join thousands of families who trust CareSync to keep their loved ones healthy and organized.
           </p>
-          <Button size="lg" variant="secondary" onClick={handleGetStarted} className="text-lg px-8 py-3">
+          <Button size="lg" variant="secondary" onClick={handleGetStarted} className="text-lg px-8 py-3 bg-white text-emerald-600 hover:bg-gray-50 shadow-lg transform hover:scale-105 transition-all">
             Start Your Free Trial
             <Star className="w-5 h-5 ml-2" />
           </Button>
@@ -271,7 +281,7 @@ const Landing = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
                   <Heart className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-xl font-bold">CareSync</h3>
@@ -304,6 +314,9 @@ const Landing = () => {
           </div>
         </div>
       </footer>
+
+      {/* Sign In Modal */}
+      <SignInModal isOpen={showSignIn} onClose={() => setShowSignIn(false)} />
     </div>
   );
 };
