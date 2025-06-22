@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Calendar, Bell, Heart, Users, Activity, Shield } from "lucide-react";
+import { Plus, Calendar, Bell, Heart, Users, Activity, Shield, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import FamilyMembers from "@/components/FamilyMembers";
 import MedicationTracker from "@/components/MedicationTracker";
 import AppointmentScheduler from "@/components/AppointmentScheduler";
@@ -13,12 +14,17 @@ import { useToast } from "@/hooks/use-toast";
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleQuickAction = (action: string) => {
     toast({
       title: "Feature activated",
       description: `${action} feature is ready to use!`,
     });
+  };
+
+  const handleBackToLanding = () => {
+    navigate("/");
   };
 
   return (
@@ -28,6 +34,15 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleBackToLanding}
+                className="mr-2"
+              >
+                <ArrowLeft className="w-4 h-4 mr-1" />
+                Back
+              </Button>
               <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
                 <Heart className="w-6 h-6 text-white" />
               </div>
