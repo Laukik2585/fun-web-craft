@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, User, Heart, Calendar, Phone } from "lucide-react";
+import { Plus, User, Heart, Calendar, Phone, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const FamilyMembers = () => {
@@ -86,6 +87,25 @@ const FamilyMembers = () => {
     toast({
       title: "Success",
       description: `${newMember.name} has been added to your family.`
+    });
+  };
+
+  const handleRemoveMember = (memberId: number, memberName: string) => {
+    // Reset all data to zero when a family member is removed
+    const updatedMembers = familyMembers
+      .filter(member => member.id !== memberId)
+      .map(member => ({
+        ...member,
+        medicationCount: 0,
+        nextAppointment: "No appointments scheduled",
+        healthConditions: []
+      }));
+
+    setFamilyMembers(updatedMembers);
+    
+    toast({
+      title: "Family Member Removed",
+      description: `${memberName} has been removed and all data has been reset.`
     });
   };
 
@@ -191,22 +211,48 @@ const FamilyMembers = () => {
         {familyMembers.map((member) => (
           <Card key={member.id} className="hover:shadow-lg transition-shadow">
             <CardHeader className="pb-4">
-              <div className="flex items-center space-x-4">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={member.avatar} />
-                  <AvatarFallback className="bg-gradient-to-r from-blue-500 to-green-500 text-white">
-                    {getInitials(member.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <CardTitle className="text-lg">{member.name}</CardTitle>
-                  <div className="flex items-center space-x-2 mt-1">
-                    <Badge className={getRelationshipColor(member.relationship)}>
-                      {member.relationship}
-                    </Badge>
-                    <span className="text-sm text-gray-600">Age {member.age}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src={member.avatar} />
+                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-green-500 text-white">
+                      {getInitials(member.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <CardTitle className="text-lg">{member.name}</CardTitle>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <Badge className={getRelationshipColor(member.relationship)}>
+                        {member.relationship}
+                      </Badge>
+                      <span className="text-sm text-gray-600">Age {member.age}</span>
+                    </div>
                   </div>
                 </div>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 hover:bg-red-50">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Remove Family Member</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to remove {member.name}? This action will also reset all medications, appointments, and health data for all family members to zero. This cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction 
+                        onClick={() => handleRemoveMember(member.id, member.name)}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        Remove
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
